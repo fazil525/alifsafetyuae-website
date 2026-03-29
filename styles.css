@@ -837,6 +837,24 @@ p {
 }
 
 @media (max-width: 768px) {
+    .top-bar-container {
+        flex-direction: column;
+        gap: 12px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+    
+    .top-bar-contact {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
+    }
+    
+    .top-bar-contact span {
+        white-space: nowrap;
+        justify-content: center;
+    }
+
     .nav-links {
         display: none;
     }
