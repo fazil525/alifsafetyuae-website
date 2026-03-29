@@ -1,0 +1,23 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Node modules (just in case future tools are added)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Generic Temp files
+*.log
+tmp/
+temp/
