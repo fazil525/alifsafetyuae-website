@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     menuBtn.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
-        
+
         // Toggle icon between menu and x
         const iconElement = menuBtn.querySelector('i');
         if (mobileMenu.classList.contains('active')) {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 3. Navbar Sticky Effect on Scroll
     const navbar = document.querySelector('.navbar');
-    
+
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navbar.style.padding = '10px 0';
@@ -47,17 +47,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
+
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 // Account for fixed header height
                 const headerOffset = 80;
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
+
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: "smooth"
@@ -66,30 +66,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Contact Form Submission handling (Prevent default for demo)
+    // 5. Contact Form Submission handling
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
             // Simple visual feedback
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
-            
+
             btn.textContent = 'Sending...';
             btn.style.opacity = '0.8';
-            
-            setTimeout(() => {
-                btn.textContent = 'Sent Successfully!';
-                btn.classList.remove('btn-primary');
-                btn.style.backgroundColor = 'var(--primary)';
-                contactForm.reset();
-                
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.opacity = '1';
-                }, 3000);
-            }, 1000);
+            btn.disabled = true;
+
+            // ⚠️ USER TODO: Paste your Google Apps Script Web App URL replacing the string below
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbzJTxC-S9F75iooOTsgAF73ZWAZHaby0-O4sGUXp6ET165671WAEUekAZ5GD5VDoos3/exec';
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(contactForm) })
+                .then(response => {
+                    btn.textContent = 'Sent Successfully!';
+                    btn.classList.remove('btn-primary');
+                    btn.style.backgroundColor = 'var(--primary)';
+                    contactForm.reset();
+
+                    // Show beautiful toast
+                    const toast = document.getElementById('toast');
+                    toast.classList.add('show');
+
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 5000); // Hide after 5 seconds
+
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.opacity = '1';
+                        btn.style.backgroundColor = ''; // Reset inline style
+                        btn.classList.add('btn-primary');
+                        btn.disabled = false;
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    btn.textContent = 'Error Sending';
+                    btn.style.backgroundColor = '#ef4444'; // Red error
+
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.opacity = '1';
+                        btn.style.backgroundColor = '';
+                        btn.disabled = false;
+                    }, 3000);
+                });
+        });
+    }
+
+    // Toast Close Button Setup
+    const toastClose = document.querySelector('.toast-close');
+    if (toastClose) {
+        toastClose.addEventListener('click', () => {
+            document.getElementById('toast').classList.remove('show');
         });
     }
 
@@ -115,14 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         lightboxClose.addEventListener('click', closeLightbox);
-        
+
         // Close when clicking outside the image
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox) {
                 closeLightbox();
             }
         });
-        
+
         // Close on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeLightbox();
@@ -136,12 +172,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const startCounting = () => {
         if (hasCounted) return;
         hasCounted = true;
-        
+
         metricNumbers.forEach(metric => {
             const target = +metric.getAttribute('data-target');
             const duration = 2000; // 2 seconds
             const increment = target / (duration / 16); // ~60fps
-            
+
             let current = 0;
             const updateCounter = () => {
                 current += increment;
