@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,11 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
+    <!-- Page Preloader -->
+    <div id="preloader" class="preloader">
+        <div class="spinner"></div>
+    </div>
+
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress-container">
         <div class="scroll-progress-bar" id="scroll-progress"></div>
@@ -28,6 +33,10 @@
             </div>
             
             <div class="top-bar-social">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="lang-toggle" aria-label="Toggle Dark Mode">
+                    <i data-lucide="moon" class="small-icon theme-icon"></i>
+                </button>
                 <!-- Translation Toggle -->
                 <button id="lang-toggle" class="lang-toggle" aria-label="Toggle Language">
                     <span id="lang-text" class="lang-text">عربى</span> <i data-lucide="globe" class="small-icon"></i>
@@ -74,7 +83,11 @@
         <div class="hero-overlay"></div>
         <div class="container hero-container">
             <div class="hero-content">
-                <h1 class="i18n-text" data-en="Elevating Safety Standards in the UAE" data-ar="الارتقاء بمعايير السلامة في الإمارات">Elevating Safety Standards in the UAE</h1>
+                <h1 class="hero-title">
+                    <span class="i18n-text" data-en="Elevating" data-ar="الارتقاء بـ">Elevating</span> 
+                    <span class="typewriter text-accent" data-en="Safety Standards" data-ar="معايير السلامة" id="typewriter">Safety Standards</span><br>
+                    <span class="i18n-text" data-en="in the UAE" data-ar="في الإمارات">in the UAE</span>
+                </h1>
                 <p class="i18n-text" data-en="Expert consultancy, third-party inspections, and comprehensive training to ensure a safer workplace for your team." data-ar="استشارات متخصصة، فحوصات طرف ثالث، وتدريب شامل لضمان بيئة عمل أكثر أمانًا لفريقك.">Expert consultancy, third-party inspections, and comprehensive training to ensure a safer workplace for your team.</p>
                 <div class="hero-actions">
                     <a href="#contact" class="btn btn-primary btn-large i18n-text" data-en="Get a Free Consultation" data-ar="احصل على استشارة مجانية">Get a Free Consultation</a>
@@ -116,6 +129,11 @@
                     <p class="i18n-text" data-en="Based in Dubai, Alif Safety Consultancy is dedicated to providing top-tier professional safety, technical training, and consulting services." data-ar="مقرنا في دبي، ألف لاستشارات السلامة مكرسة لتقديم أعلى مستويات السلامة المهنية، والتدريب الفني، والخدمات الاستشارية.">Based in Dubai, Alif Safety Consultancy is dedicated to providing top-tier professional safety, technical training, and consulting services.</p>
                     <p class="i18n-text" data-en="Our mission is to empower organizations with the knowledge and frameworks they need to mitigate risks, ensure compliance, and foster a robust culture of safety in every workplace." data-ar="مهمتنا هي تمكين المؤسسات بالمعرفة والأطر التي يحتاجونها للتخفيف من المخاطر وضمان الامتثال وتعزيز ثقافة السلامة القوية.">Our mission is to empower organizations with the knowledge and frameworks they need to mitigate risks, ensure compliance, and foster a robust culture of safety in every workplace.</p>
                     
+                    <a href="#" class="btn btn-outline mt-4 dl-profile-btn" download>
+                        <i data-lucide="download" class="small-icon"></i> 
+                        <span class="i18n-text" data-en="Download Company Profile (PDF)" data-ar="تحميل ملف الشركة">Download Company Profile (PDF)</span>
+                    </a>
+                    
                     <div class="stats-grid">
                         <div class="stat-card">
                             <i data-lucide="users" class="stat-icon"></i>
@@ -152,31 +170,26 @@
             </div>
 
             <div class="services-grid">
-                <!-- Service 1 -->
                 <div class="service-card reveal interactive-card" data-modal="third-party">
                     <div class="icon-wrapper"><i data-lucide="clipboard-check"></i></div>
                     <h3 class="i18n-text" data-en="Third-Party Inspections" data-ar="فحوصات الطرف الثالث">Third-Party Inspections</h3>
                     <p class="i18n-text" data-en="Impartial and accurate inspections to ensure equipment and sites meet strict safety standards." data-ar="فحوصات محايدة ودقيقة لضمان تلبية المعدات والمواقع لمعايير السلامة الصارمة.">Impartial and accurate inspections to ensure equipment and sites meet strict safety standards.</p>
                 </div>
-                <!-- Service 2 -->
                 <div class="service-card reveal interactive-card" data-modal="audits">
                     <div class="icon-wrapper"><i data-lucide="file-search"></i></div>
                     <h3 class="i18n-text" data-en="Health & Safety Audits" data-ar="تدقيق الصحة والسلامة">Health & Safety Audits</h3>
                     <p class="i18n-text" data-en="Detailed evaluations of your HSE management systems to identify risks and improvements." data-ar="تقييمات مفصلة لأنظمة إدارة الصحة والسلامة الخاصة بك لتحديد المخاطر والتحسينات.">Detailed evaluations of your HSE management systems to identify risks and improvements.</p>
                 </div>
-                <!-- Service 3 -->
                 <div class="service-card reveal interactive-card" data-modal="qa">
                     <div class="icon-wrapper"><i data-lucide="star"></i></div>
                     <h3 class="i18n-text" data-en="Quality Assurance" data-ar="ضمان الجودة">Quality Assurance</h3>
                     <p class="i18n-text" data-en="Helping your organization implement and maintain the highest levels of quality control." data-ar="مساعدة مؤسستك على تنفيذ والحفاظ على أعلى مستويات مراقبة الجودة.">Helping your organization implement and maintain the highest levels of quality control.</p>
                 </div>
-                <!-- Service 4 -->
                 <div class="service-card reveal interactive-card" data-modal="env">
                     <div class="icon-wrapper"><i data-lucide="leaf"></i></div>
                     <h3 class="i18n-text" data-en="Environmental Management" data-ar="الإدارة البيئية">Environmental Management</h3>
                     <p class="i18n-text" data-en="Sustainable strategies to minimize environmental impact and ensure regulatory compliance." data-ar="استراتيجيات مستدامة لتقليل التأثير البيئي وضمان الامتثال التنظيمي.">Sustainable strategies to minimize environmental impact and ensure regulatory compliance.</p>
                 </div>
-                <!-- Service 5 -->
                 <div class="service-card reveal interactive-card" data-modal="calibration">
                     <div class="icon-wrapper"><i data-lucide="sliders"></i></div>
                     <h3 class="i18n-text" data-en="Machine Calibration" data-ar="معايرة الآلات">Machine Calibration</h3>
@@ -195,8 +208,16 @@
                 <p class="i18n-text" data-en="Equipping your workforce with hands-on skills and critical safety knowledge." data-ar="تزويد القوى العاملة لديك بالمهارات العملية ومعرفة السلامة الحاسمة.">Equipping your workforce with hands-on skills and critical safety knowledge.</p>
             </div>
 
-            <div class="training-grid">
-                <div class="training-card reveal">
+            <!-- Training Filters -->
+            <div class="filter-controls reveal">
+                <button class="filter-btn active i18n-text" data-filter="all" data-en="All Courses" data-ar="جميع الدورات">All Courses</button>
+                <button class="filter-btn i18n-text" data-filter="high-risk" data-en="High-Risk" data-ar="عالية المخاطر">High-Risk</button>
+                <button class="filter-btn i18n-text" data-filter="lifting" data-en="Lifting" data-ar="الرفع">Lifting</button>
+                <button class="filter-btn i18n-text" data-filter="hse" data-en="HSE" data-ar="الصحة والسلامة">HSE</button>
+            </div>
+
+            <div class="training-grid" id="training-grid">
+                <div class="training-card filter-item reveal" data-category="high-risk">
                     <h4 class="i18n-text" data-en="High-Risk Operations" data-ar="العمليات عالية المخاطر">High-Risk Operations</h4>
                     <ul>
                         <li><i data-lucide="trending-up"></i> <span class="i18n-text" data-en="Working at Heights Safety" data-ar="سلامة العمل في المرتفعات">Working at Heights Safety</span></li>
@@ -204,7 +225,7 @@
                         <li><i data-lucide="flame"></i> <span class="i18n-text" data-en="Welding Safety Awareness" data-ar="التوعية بسلامة اللحام">Welding Safety Awareness</span></li>
                     </ul>
                 </div>
-                <div class="training-card reveal">
+                <div class="training-card filter-item reveal" data-category="lifting">
                     <h4 class="i18n-text" data-en="Lifting & Equipment" data-ar="الرفع والمعدات">Lifting & Equipment</h4>
                     <ul>
                         <li><i data-lucide="arrow-up-circle"></i> <span class="i18n-text" data-en="Tower Crane Operator" data-ar="مشغل رافعة برجية">Tower Crane Operator</span></li>
@@ -212,7 +233,7 @@
                         <li><i data-lucide="truck"></i> <span class="i18n-text" data-en="Shovel Loader Operator" data-ar="مشغل جرافة">Shovel Loader Operator</span></li>
                     </ul>
                 </div>
-                <div class="training-card reveal">
+                <div class="training-card filter-item reveal" data-category="hse">
                     <h4 class="i18n-text" data-en="General & Specialized HSE" data-ar="الصحة والسلامة العامة والمتخصصة">General & Specialized HSE</h4>
                     <ul>
                         <li><i data-lucide="activity"></i> <span class="i18n-text" data-en="HSE General Training" data-ar="تدريب عام في الصحة والسلامة">HSE General Training</span></li>
@@ -313,14 +334,12 @@
         <!-- Infinite Scrolling Marquee -->
         <div class="clients-marquee reveal">
             <div class="marquee-content">
-                <!-- Set 1 -->
                 <div class="client-dummy"><i data-lucide="building-2"></i><span>Apex BuildTech</span></div>
                 <div class="client-dummy"><i data-lucide="factory"></i><span>Global Industries</span></div>
                 <div class="client-dummy"><i data-lucide="snowflake"></i><span>Desert Logistics</span></div>
                 <div class="client-dummy"><i data-lucide="zap"></i><span>Emirates Power</span></div>
                 <div class="client-dummy"><i data-lucide="droplet"></i><span>Oasis Management</span></div>
                 <div class="client-dummy"><i data-lucide="hard-hat"></i><span>Prime Construct</span></div>
-                <!-- Set 2 for infinite loop -->
                 <div class="client-dummy"><i data-lucide="building-2"></i><span>Apex BuildTech</span></div>
                 <div class="client-dummy"><i data-lucide="factory"></i><span>Global Industries</span></div>
                 <div class="client-dummy"><i data-lucide="snowflake"></i><span>Desert Logistics</span></div>
@@ -434,9 +453,7 @@
                 </div>
             </div>
             
-            <!-- Google Maps Embed -->
             <div class="contact-map reveal mt-40">
-                <!-- To change the map location, replace the src="" URL below with your new embedded Google Map link -->
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3613.6826620573983!2d55.242200275815344!3d25.04482093786196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6e5ec015ce0d%3A0xeacfe450d9bf8bdc!2sDiamond%20Business%20Centre%202!5e0!3m2!1sen!2sae!4v1700000000000!5m2!1sen!2sae" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
@@ -445,6 +462,14 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
+            <div class="footer-top p-6" style="margin-bottom: 40px; background: rgba(0,0,0,0.2); padding: 30px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <h4 class="i18n-text" data-en="Subscribe to our Newsletter" data-ar="اشترك في النشرة الإخبارية" style="margin-bottom: 8px;">Subscribe to our Newsletter</h4>
+                <p class="i18n-text" data-en="Get the latest updates on HSE regulations." data-ar="احصل على أحدث التحديثات حول لوائح الصحة والسلامة." style="margin-bottom: 20px;">Get the latest updates on HSE regulations.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');" style="display: flex; gap: 8px; max-width: 400px; width: 100%;">
+                    <input type="email" placeholder="Email Address" required style="flex: 1; padding: 12px; border-radius: 6px; border: none; outline: none;">
+                    <button type="submit" class="btn btn-primary" style="padding: 12px 20px;"><i data-lucide="send"></i></button>
+                </form>
+            </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Alif Safety Consultancy. <span class="i18n-text" data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
                 <div class="social-links">

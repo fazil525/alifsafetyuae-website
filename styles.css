@@ -1461,3 +1461,176 @@ body.rtl .info-modal .modal-close {
     .whatsapp-widget { right: 16px; }
     .back-to-top { left: 16px; }
 }
+
+/* ---- PHASE 2 UPGRADES ---- */
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* Custom Text Selection */
+::selection {
+    background: var(--accent);
+    color: white;
+}
+
+/* Preloader */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary);
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.preloader.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    border-top: 5px solid var(--accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Typewriter Cursor */
+.typewriter {
+    border-right: 2px solid var(--accent);
+    padding-right: 4px;
+    animation: blinkCursor 0.75s step-end infinite;
+    white-space: nowrap;
+}
+@keyframes blinkCursor {
+    from, to { border-color: transparent }
+    50% { border-color: var(--accent); }
+}
+
+/* Training Filters */
+.filter-controls {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.filter-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.filter-btn.active, .filter-btn:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+}
+.filter-item {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.filter-item.hidden {
+    display: none;
+}
+.filter-item.fade-in {
+    animation: mapFade 0.4s ease forwards;
+}
+@keyframes mapFade {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+    --bg-main: #0f172a;
+    --bg-white: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #cbd5e1;
+    --border-color: #334155;
+    --secondary: #002323; /* Darker teal */
+}
+
+[data-theme="dark"] .bg-light {
+    background-color: var(--bg-white);
+}
+
+[data-theme="dark"] .bg-dark {
+    background-color: #060B12;
+}
+
+[data-theme="dark"] .navbar {
+    background-color: rgba(30, 41, 59, 0.95);
+}
+
+[data-theme="dark"] .logo {
+    color: var(--text-main);
+}
+
+[data-theme="dark"] .service-card, 
+[data-theme="dark"] .faq-item, 
+[data-theme="dark"] .contact-form-container,
+[data-theme="dark"] .testimonial-slider,
+[data-theme="dark"] .visual-card {
+    background: var(--bg-white);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] h5, 
+[data-theme="dark"] h6 {
+    color: var(--text-main);
+}
+
+[data-theme="dark"] .faq-header {
+    background: var(--bg-white);
+}
+
+[data-theme="dark"] .faq-header:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+[data-theme="dark"] .btn-outline {
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+}
+[data-theme="dark"] .btn-outline:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+[data-theme="dark"] .info-modal .modal-content {
+    background: var(--bg-white);
+}
+
+[data-theme="dark"] .toast {
+    background: var(--bg-white);
+}

@@ -7,16 +7,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.querySelector('.mobile-menu');
     const mobileLinks = mobileMenu.querySelectorAll('a');
 
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-        const iconElement = menuBtn.querySelector('i');
-        if (mobileMenu.classList.contains('active')) {
-            iconElement.setAttribute('data-lucide', 'x');
-        } else {
-            iconElement.setAttribute('data-lucide', 'menu');
-        }
-        lucide.createIcons();
-    });
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            const iconElement = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('active')) {
+                iconElement.setAttribute('data-lucide', 'x');
+            } else {
+                iconElement.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        });
+    }
 
     mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -33,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.getElementById('back-to-top');
 
     window.addEventListener('scroll', () => {
-        // Sticky Navbar
         if (window.scrollY > 50) {
             navbar.style.padding = '10px 0';
             navbar.style.boxShadow = 'var(--shadow-md)';
@@ -42,13 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.style.boxShadow = 'var(--shadow-sm)';
         }
 
-        // Scroll Progress Bar
         const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (winScroll / height) * 100;
         if (progressBar) progressBar.style.width = scrolled + "%";
 
-        // Back to Top Button
         if (backToTopBtn) {
             if (window.scrollY > 500) {
                 backToTopBtn.classList.add('visible');
@@ -64,14 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Smooth Scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');
-            if (targetId === '#' || targetId === '#contact') {
-                 // Ignore standard smooth scroll if it's the contact form modal trigger or just #
-                 // contact handles itself if it exists on page
-            }
+            if (targetId === '#' || targetId === '#contact') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
@@ -80,15 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
+                window.scrollTo({ top: offsetPosition, behavior: "smooth" });
             }
         });
     });
 
-    // 4. Contact Form Submission handling
+    // 4. Contact Form Submission
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
@@ -96,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
             
-            // Check language for "Sending..." text
             const isArabic = document.body.classList.contains('rtl');
             btn.textContent = isArabic ? 'جاري الإرسال...' : 'Sending...';
             btn.style.opacity = '0.8';
@@ -145,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. Gallery Lightbox Logic
+    // 5. Lightbox
     const galleryItems = document.querySelectorAll('.gallery-item');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -168,12 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target === lightbox) closeLightbox();
         });
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'Escape' && infoModal.classList.contains('active')) infoModal.classList.remove('active');
+            if (e.key === 'Escape') {
+                closeLightbox();
+                const infoModal = document.getElementById('info-modal');
+                if(infoModal) infoModal.classList.remove('active');
+            }
         });
     }
 
-    // 6. Metrics Counter Animation
+    // 6. Metrics Counter
     const metricNumbers = document.querySelectorAll('.metric-number');
     let hasCounted = false;
 
@@ -183,8 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         metricNumbers.forEach(metric => {
             const target = +metric.getAttribute('data-target');
-            const duration = 2000;
-            const increment = target / (duration / 16);
+            const increment = target / (2000 / 16);
             let current = 0;
             const updateCounter = () => {
                 current += increment;
@@ -210,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(metricsSection);
     }
 
-    // 7. Scroll Reveal Observer
+    // 7. Scroll Reveal
     const revealElements = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries, observerStyle) => {
         entries.forEach(entry => {
@@ -222,9 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // ---- NEW FEATURES LOGIC ---- //
-
-    // 8. Language Toggle (Arabic / English)
+    // 8. Language Toggle
     const langToggleBtn = document.getElementById('lang-toggle');
     const langTextDisplay = document.getElementById('lang-text');
     const i18nElements = document.querySelectorAll('.i18n-text');
@@ -246,7 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 langTextDisplay.textContent = 'عربى';
             }
 
-            // Swap text for all items
             i18nElements.forEach(el => {
                 const text = el.getAttribute(`data-${currentLang}`);
                 if (text) {
@@ -262,20 +252,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 9. FAQ Accordion Logic
+    // 9. FAQ Accordion
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const header = item.querySelector('.faq-header');
         header.addEventListener('click', () => {
             const isActive = item.classList.contains('active');
-            // Close all other FAQs
             faqItems.forEach(faq => faq.classList.remove('active'));
-            // Toggle clicked FAQ
             if (!isActive) item.classList.add('active');
         });
     });
 
-    // 10. Testimonials Slider Logic
+    // 10. Testimonials Slider
     const track = document.getElementById('testimonial-track');
     const slides = document.querySelectorAll('.testimonial-slide');
     const nextBtn = document.getElementById('next-slide');
@@ -285,7 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (track && slides.length > 0) {
         let currentIndex = 0;
         
-        // Create dots
         slides.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.classList.add('slider-dot');
@@ -324,12 +311,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (nextBtn) nextBtn.addEventListener('click', nextSlide);
         if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-
-        // Auto play
         setInterval(nextSlide, 6000);
     }
 
-    // 11. Modal Logic for Services
+    // 11. Modal Logic
     const serviceCards = document.querySelectorAll('.interactive-card');
     const infoModal = document.getElementById('info-modal');
     
@@ -379,10 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     bodyEl.innerHTML = `<p>${data[lang].text}</p>`;
                     ctaEl.textContent = lang === 'ar' ? 'احصل على عرض سعر' : 'Get a Quote';
                     
-                    // Update icon
                     iconEl.setAttribute('data-lucide', data.icon);
                     lucide.createIcons();
-
                     infoModal.classList.add('active');
                 }
             });
@@ -396,10 +379,109 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ctaEl) {
             ctaEl.addEventListener('click', () => {
                 infoModal.classList.remove('active');
-                // Pre-select service in form
                 const select = document.getElementById('service');
-                if (select) select.value = select.options[1].value; // Defaults to Consultancy
+                if (select) select.value = select.options[1].value;
             });
         }
+    }
+
+    // ---- PHASE 2 LOGIC ---- //
+
+    // 12. Dark Mode Toggle
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const htmlEl = document.documentElement;
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlEl.setAttribute('data-theme', newTheme);
+            
+            // Switch Icon
+            const icon = themeToggleBtn.querySelector('i');
+            icon.setAttribute('data-lucide', newTheme === 'dark' ? 'sun' : 'moon');
+            lucide.createIcons();
+        });
+    }
+
+    // 13. Training Filtering Grid
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const filterItems = document.querySelectorAll('.filter-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active from all
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const targetFilter = btn.getAttribute('data-filter');
+
+            filterItems.forEach(item => {
+                item.classList.remove('fade-in');
+                item.classList.add('hidden');
+
+                if (targetFilter === 'all' || item.getAttribute('data-category') === targetFilter) {
+                    // Slight delay to allow CSS reflow
+                    setTimeout(() => {
+                        item.classList.remove('hidden');
+                        item.classList.add('fade-in');
+                    }, 50);
+                }
+            });
+        });
+    });
+
+    // 14. Typewriter Effect
+    const typewriterEl = document.getElementById('typewriter');
+    if (typewriterEl) {
+        const phrases = {
+            en: ["Safety Standards", "Corporate Audits", "HSE Training"],
+            ar: ["معايير السلامة", "التدقيق المؤسسي", "تدريب الصحة والسلامة"]
+        };
+        
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingDelay = 100;
+
+        function type() {
+            const currentLang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+            const currentPhrases = phrases[currentLang];
+            const currentString = currentPhrases[phraseIndex];
+
+            if (isDeleting) {
+                typewriterEl.textContent = currentString.substring(0, charIndex - 1);
+                charIndex--;
+                typingDelay = 50;
+            } else {
+                typewriterEl.textContent = currentString.substring(0, charIndex + 1);
+                charIndex++;
+                typingDelay = 100;
+            }
+
+            if (!isDeleting && charIndex === currentString.length) {
+                typingDelay = 2000; // Pause at end of word
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % currentPhrases.length;
+                typingDelay = 500; // Pause before typing new word
+            }
+
+            setTimeout(type, typingDelay);
+        }
+
+        // Start typing effect slightly after load
+        setTimeout(type, 1000);
+    }
+});
+
+// 15. Window OnLoad Preloader
+window.addEventListener('load', () => {
+    const preloader = document.getElementById('preloader');
+    if (preloader) {
+        setTimeout(() => {
+            preloader.classList.add('hidden');
+        }, 500); // Give it a slight delay so user sees it successfully loaded
     }
 });
