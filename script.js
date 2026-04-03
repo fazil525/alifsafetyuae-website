@@ -9,18 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     menuBtn.addEventListener('click', () => {
         mobileMenu.classList.toggle('active');
-
-        // Toggle icon between menu and x
         const iconElement = menuBtn.querySelector('i');
         if (mobileMenu.classList.contains('active')) {
             iconElement.setAttribute('data-lucide', 'x');
         } else {
             iconElement.setAttribute('data-lucide', 'menu');
         }
-        lucide.createIcons(); // re-initialize to show new icon
+        lucide.createIcons();
     });
 
-    // Close mobile menu when a link is clicked
     mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
@@ -30,10 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Navbar Sticky Effect on Scroll
+    // 3. Navbar Sticky & Scroll Progress & Back-to-top
     const navbar = document.querySelector('.navbar');
+    const progressBar = document.getElementById('scroll-progress');
+    const backToTopBtn = document.getElementById('back-to-top');
 
     window.addEventListener('scroll', () => {
+        // Sticky Navbar
         if (window.scrollY > 50) {
             navbar.style.padding = '10px 0';
             navbar.style.boxShadow = 'var(--shadow-md)';
@@ -41,19 +41,41 @@ document.addEventListener('DOMContentLoaded', () => {
             navbar.style.padding = '16px 0';
             navbar.style.boxShadow = 'var(--shadow-sm)';
         }
+
+        // Scroll Progress Bar
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        if (progressBar) progressBar.style.width = scrolled + "%";
+
+        // Back to Top Button
+        if (backToTopBtn) {
+            if (window.scrollY > 500) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
     });
 
-    // 4. Smooth Scrolling for anchor links (fallback/enhancement)
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Smooth Scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-
             const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-
+            if (targetId === '#' || targetId === '#contact') {
+                 // Ignore standard smooth scroll if it's the contact form modal trigger or just #
+                 // contact handles itself if it exists on page
+            }
+            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                // Account for fixed header height
+                e.preventDefault();
                 const headerOffset = 80;
                 const elementPosition = targetElement.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -66,50 +88,45 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 5. Contact Form Submission handling
+    // 4. Contact Form Submission handling
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
-
-            // Simple visual feedback
             const btn = contactForm.querySelector('button[type="submit"]');
             const originalText = btn.textContent;
-
-            btn.textContent = 'Sending...';
+            
+            // Check language for "Sending..." text
+            const isArabic = document.body.classList.contains('rtl');
+            btn.textContent = isArabic ? 'جاري الإرسال...' : 'Sending...';
             btn.style.opacity = '0.8';
             btn.disabled = true;
 
-            // ⚠️ USER TODO: Paste your Google Apps Script Web App URL replacing the string below
             const scriptURL = 'https://script.google.com/macros/s/AKfycbzJTxC-S9F75iooOTsgAF73ZWAZHaby0-O4sGUXp6ET165671WAEUekAZ5GD5VDoos3/exec';
 
             fetch(scriptURL, { method: 'POST', body: new FormData(contactForm) })
                 .then(response => {
-                    btn.textContent = 'Sent Successfully!';
+                    btn.textContent = isArabic ? 'تم الإرسال بنجاح!' : 'Sent Successfully!';
                     btn.classList.remove('btn-primary');
                     btn.style.backgroundColor = 'var(--primary)';
                     contactForm.reset();
 
-                    // Show beautiful toast
                     const toast = document.getElementById('toast');
                     toast.classList.add('show');
-
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                    }, 5000); // Hide after 5 seconds
+                    setTimeout(() => toast.classList.remove('show'), 5000);
 
                     setTimeout(() => {
                         btn.textContent = originalText;
                         btn.style.opacity = '1';
-                        btn.style.backgroundColor = ''; // Reset inline style
+                        btn.style.backgroundColor = '';
                         btn.classList.add('btn-primary');
                         btn.disabled = false;
                     }, 3000);
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
-                    btn.textContent = 'Error Sending';
-                    btn.style.backgroundColor = '#ef4444'; // Red error
+                    btn.textContent = isArabic ? 'خطأ في الإرسال' : 'Error Sending';
+                    btn.style.backgroundColor = '#ef4444';
 
                     setTimeout(() => {
                         btn.textContent = originalText;
@@ -121,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Toast Close Button Setup
     const toastClose = document.querySelector('.toast-close');
     if (toastClose) {
         toastClose.addEventListener('click', () => {
@@ -129,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 6. Gallery Lightbox Logic
+    // 5. Gallery Lightbox Logic
     const galleryItems = document.querySelectorAll('.gallery-item');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -146,26 +162,18 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        const closeLightbox = () => {
-            lightbox.classList.remove('active');
-        };
-
-        lightboxClose.addEventListener('click', closeLightbox);
-
-        // Close when clicking outside the image
+        const closeLightbox = () => lightbox.classList.remove('active');
+        if(lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                closeLightbox();
-            }
+            if (e.target === lightbox) closeLightbox();
         });
-
-        // Close on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'Escape' && infoModal.classList.contains('active')) infoModal.classList.remove('active');
         });
     }
 
-    // 7. Metrics Counter Animation
+    // 6. Metrics Counter Animation
     const metricNumbers = document.querySelectorAll('.metric-number');
     let hasCounted = false;
 
@@ -175,9 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         metricNumbers.forEach(metric => {
             const target = +metric.getAttribute('data-target');
-            const duration = 2000; // 2 seconds
-            const increment = target / (duration / 16); // ~60fps
-
+            const duration = 2000;
+            const increment = target / (duration / 16);
             let current = 0;
             const updateCounter = () => {
                 current += increment;
@@ -192,20 +199,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            startCounting();
-            // Disconnect once counted
-            observer.disconnect();
-        }
-    }, { threshold: 0.5 });
-
     const metricsSection = document.querySelector('.metrics-banner');
     if (metricsSection) {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                startCounting();
+                observer.disconnect();
+            }
+        }, { threshold: 0.5 });
         observer.observe(metricsSection);
     }
 
-    // 8. Scroll Reveal Observer
+    // 7. Scroll Reveal Observer
     const revealElements = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries, observerStyle) => {
         entries.forEach(entry => {
@@ -214,10 +219,187 @@ document.addEventListener('DOMContentLoaded', () => {
                 observerStyle.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ---- NEW FEATURES LOGIC ---- //
+
+    // 8. Language Toggle (Arabic / English)
+    const langToggleBtn = document.getElementById('lang-toggle');
+    const langTextDisplay = document.getElementById('lang-text');
+    const i18nElements = document.querySelectorAll('.i18n-text');
+    let currentLang = 'en';
+
+    if (langToggleBtn) {
+        langToggleBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            
+            if (currentLang === 'ar') {
+                document.body.classList.add('rtl');
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+                langTextDisplay.textContent = 'English';
+            } else {
+                document.body.classList.remove('rtl');
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', 'en');
+                langTextDisplay.textContent = 'عربى';
+            }
+
+            // Swap text for all items
+            i18nElements.forEach(el => {
+                const text = el.getAttribute(`data-${currentLang}`);
+                if (text) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.setAttribute('placeholder', text);
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = text;
+                    } else {
+                        el.textContent = text;
+                    }
+                }
+            });
+        });
+    }
+
+    // 9. FAQ Accordion Logic
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const header = item.querySelector('.faq-header');
+        header.addEventListener('click', () => {
+            const isActive = item.classList.contains('active');
+            // Close all other FAQs
+            faqItems.forEach(faq => faq.classList.remove('active'));
+            // Toggle clicked FAQ
+            if (!isActive) item.classList.add('active');
+        });
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    // 10. Testimonials Slider Logic
+    const track = document.getElementById('testimonial-track');
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const nextBtn = document.getElementById('next-slide');
+    const prevBtn = document.getElementById('prev-slide');
+    const dotsContainer = document.getElementById('slider-dots');
+    
+    if (track && slides.length > 0) {
+        let currentIndex = 0;
+        
+        // Create dots
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.classList.add('slider-dot');
+            if (i === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+        const dots = document.querySelectorAll('.slider-dot');
+
+        const updateSlider = () => {
+            const isRtl = document.body.classList.contains('rtl');
+            const directionMultiplier = isRtl ? 1 : -1;
+            track.style.transform = `translateX(${currentIndex * 100 * directionMultiplier}%)`;
+            
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            
+            slides[currentIndex].classList.add('active');
+            dots[currentIndex].classList.add('active');
+        };
+
+        const goToSlide = (index) => {
+            currentIndex = index;
+            updateSlider();
+        };
+
+        const nextSlide = () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlider();
+        };
+
+        const prevSlide = () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlider();
+        };
+
+        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+
+        // Auto play
+        setInterval(nextSlide, 6000);
+    }
+
+    // 11. Modal Logic for Services
+    const serviceCards = document.querySelectorAll('.interactive-card');
+    const infoModal = document.getElementById('info-modal');
+    
+    const modalData = {
+        'third-party': {
+            icon: 'clipboard-check',
+            en: { title: "Third-Party Inspections", text: "We conduct exhaustive third-party inspections on lifting equipment, heavy machinery, and construction sites to ensure they comply with local municipality and continuous international standards. Our detailed reports help you avoid downtime and prevent accidents before they occur." },
+            ar: { title: "فحوصات الطرف الثالث", text: "نجري عمليات تفتيش شاملة من طرف ثالث على معدات الرفع والآلات الثقيلة ومواقع البناء للتأكد من امتثالها لمعايير البلدية المحلية والمعايير الدولية. تساعدك تقاريرنا المفصلة على تجنب التوقف عن العمل." }
+        },
+        'audits': {
+            icon: 'file-search',
+            en: { title: "Health & Safety Audits", text: "Our certified auditors will review your existing HSE policies and evaluate them directly against your active workplace environment. We identify potential hazards, non-compliance issues, and procedural gaps, offering actionable roadmaps to elevate your safety culture." },
+            ar: { title: "تدقيق الصحة والسلامة", text: "سيقوم مدققونا بمراجعة سياسات الصحة والسلامة والبيئة وتقييمها مقابل بيئة عملك. نحدد المخاطر المحتملة ونقدم خرائط طريق قابلة للتنفيذ لرفع مستوى ثقافة السلامة لديك." }
+        },
+        'qa': {
+            icon: 'star',
+            en: { title: "Quality Assurance", text: "Achieve excellence in your operations. We provide comprehensive ISO consultancy and quality management system implementation, ensuring your products, services, and construction projects meet the rigorous standards expected by top-tier clients." },
+            ar: { title: "ضمان الجودة", text: "حقق التميز في عملياتك. نقدم استشارات شاملة لنظام الأيزو وتنفيذ نظام إدارة الجودة، مما يضمن تلبية منتجاتك وخدماتك للمعايير الصارمة." }
+        },
+        'env': {
+            icon: 'leaf',
+            en: { title: "Environmental Management", text: "Navigate complex environmental legislation seamlessly. We help you design effective waste management systems, monitor ecological impact, and implement sustainable practices that not only protect the environment but also reduce operational costs." },
+            ar: { title: "الإدارة البيئية", text: "تعامل مع التشريعات البيئية المعقدة بسلاسة. نساعدك في تصميم أنظمة فعالة لإدارة النفايات، ومراقبة التأثير البيئي، وتنفيذ ممارسات مستدامة." }
+        },
+        'calibration': {
+            icon: 'sliders',
+            en: { title: "Machine Calibration", text: "Precision is non-negotiable. Our calibration services cover a wide spectrum of industrial tools, testing equipment, and safety gauges, providing you with certification that your instruments execute accurate measurements." },
+            ar: { title: "معايرة الآلات", text: "تغطي خدمات المعايرة لدينا مجموعة واسعة من الأدوات الصناعية ومعدات الاختبار ومقاييس السلامة، مما يزودك بشهادة تفيد بأن أجهزتك تنفذ قياسات دقيقة." }
+        }
+    };
+
+    if (infoModal) {
+        const titleEl = document.getElementById('modal-title');
+        const bodyEl = document.getElementById('modal-body');
+        const ctaEl = document.getElementById('modal-cta');
+        const iconEl = document.getElementById('modal-dynamic-icon');
+        const closeBtn = infoModal.querySelector('.modal-close');
+
+        serviceCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const modalId = card.getAttribute('data-modal');
+                const data = modalData[modalId];
+                
+                if (data) {
+                    const lang = document.body.classList.contains('rtl') ? 'ar' : 'en';
+                    titleEl.textContent = data[lang].title;
+                    bodyEl.innerHTML = `<p>${data[lang].text}</p>`;
+                    ctaEl.textContent = lang === 'ar' ? 'احصل على عرض سعر' : 'Get a Quote';
+                    
+                    // Update icon
+                    iconEl.setAttribute('data-lucide', data.icon);
+                    lucide.createIcons();
+
+                    infoModal.classList.add('active');
+                }
+            });
+        });
+
+        if (closeBtn) closeBtn.addEventListener('click', () => infoModal.classList.remove('active'));
+        infoModal.addEventListener('click', (e) => {
+            if (e.target === infoModal) infoModal.classList.remove('active');
+        });
+        
+        if (ctaEl) {
+            ctaEl.addEventListener('click', () => {
+                infoModal.classList.remove('active');
+                // Pre-select service in form
+                const select = document.getElementById('service');
+                if (select) select.value = select.options[1].value; // Defaults to Consultancy
+            });
+        }
+    }
 });
